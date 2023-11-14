@@ -4,8 +4,9 @@ This module contains class to create a Logger
 import logging
 import sys
 from enum import Flag, auto
+from typing import Optional
 
-from src.correlation_logger.cloudwatch_handler import CloudWatchHandler
+from correlation_logger.cloudwatch_handler import CloudWatchHandler
 
 
 class LogSink(Flag):
@@ -15,13 +16,21 @@ class LogSink(Flag):
 
 
 class Logger:
-    """This class is used to create a logger"""
+    """This class is used to create a logger
+
+    Args:
+        name (str): Log name
+        log_sink (LogSink): Output of the log. The value is
+                            an instance of LogSink class
+        log_level (int): Logging level
+        cloudwatch_handler (CloudWatchHandler): A class that handle
+                                                cloudwatch logging"""
 
     def __init__(self,
                  name: str,
                  log_sink: LogSink = LogSink.CONSOLE,
                  log_level: int = logging.ERROR,
-                 cloudwatch_handler: CloudWatchHandler = None):
+                 cloudwatch_handler: Optional[CloudWatchHandler] = None):
         self.logger = logging.getLogger(name)
         self.logger.setLevel(log_level)
         formatter = logging.Formatter(
